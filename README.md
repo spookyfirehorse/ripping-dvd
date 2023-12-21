@@ -1,4 +1,4 @@
- ripping-dvd with ffmpeg
+ ripping-dvd with ffmpeg  cuda nvdec nvenc
 
 Ripping full dvd with all subtitle and all languages
 
@@ -78,6 +78,19 @@ play it
          mpv output.mkv
 
        
-android
+for raspberry
 
-       ffmpeg   -hwaccel cuda -hwaccel_output_format nv12   -fflags +genpts+nobuffer+discardcorrupt   -hide_banner -rtsp_transport tcp   -i rtsp://127.0.0.1:8080/h264_pcm.sdp -c:v h264_nvenc -b:v 1M  -preset p1 -tune ll       -c:a libopus  -b:a 64k  -application lowdelay  -ar 48000  -f rtsp -rtsp_transport tcp  rtsp://localhost:8559/mystream
+
+#!/bin/bash
+for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzedurati>
+  -canvas_size  720x576  -i "$file"  -ss 00:00:02 -metadata title="$file" \
+  -map 0:v -scodec dvdsub   -map 0:s:0 -metadata:s:s:0 language=deu    \
+ -c:v h264_v4l2m2m  -b:v 3M -bufsize 5M  -maxrate 5M  -aspect 16:9  -r 25 \
+  -c:a libfdk_aac     -b:a 128k -map 0:a:0 -metadata:s:a:0 language=en     -f mp4  "${>
+# -filter:v scale=1280:-1
+
+#ls -lah dvd/VIDEO_TS/
+#mkdir dvd
+#sudo mount /media/storage/dead_man.iso dvd/
+#ls -lah dvd/VIDEO_TS/
+#sudo cp dvd/VIDEO_TS/VTS_02_0.IFO default.IFO
