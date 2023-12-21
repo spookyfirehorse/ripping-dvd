@@ -55,7 +55,7 @@ in this case
 
 so now the finsh
 
-       nano example.sh
+       nano ripping.sh
 
 copy and past in     
 
