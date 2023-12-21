@@ -83,6 +83,7 @@ for raspberry
 
 
     mkdir dvd
+    
 than
 
     sudo mount /dev/sr0 dvd/
@@ -124,4 +125,4 @@ if you need filter add before -f mp4
      -filter:v scale=1280:-1
 
 
-dvdrip output.vob
+      dvdrip output.vob
