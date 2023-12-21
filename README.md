@@ -81,16 +81,47 @@ play it
 for raspberry
 
 
-#!/bin/bash
-for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzedurati>
+
+    mkdir dvd
+than
+
+    sudo mount /dev/sr0 dvd/
+and
+
+    mpv dvdnav:// --dvd-device=/dev/sr0 --stream-dump=output.vob
+
+
+or if it is a iso
+
+    sudo mount /media/storage/dead_man.iso dvd/
+
+
+dump it
+
+    mpv dvdnav:// --dvd-device=/media/spooky/store/down-by-low.img --stream-dump=/media/spooky/store/output.vob
+
+lokk for GB file the biggest
+
+
+    ls -lah dvd/VIDEO_TS/
+
+
+    sudo cp dvd/VIDEO_TS/VTS_02_0.IFO default.IFO
+
+ok
+
+    nano dvdrip.sh copy this in
+
+    #!/bin/bash
+  for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzeduration 410M -hwaccel drm -hwaccel_output_format drm_prime  \
   -canvas_size  720x576  -i "$file"  -ss 00:00:02 -metadata title="$file" \
   -map 0:v -scodec dvdsub   -map 0:s:0 -metadata:s:s:0 language=deu    \
  -c:v h264_v4l2m2m  -b:v 3M -bufsize 5M  -maxrate 5M  -aspect 16:9  -r 25 \
-  -c:a libfdk_aac     -b:a 128k -map 0:a:0 -metadata:s:a:0 language=en     -f mp4  "${>
-# -filter:v scale=1280:-1
+  -c:a libfdk_aac     -b:a 128k -map 0:a:0 -metadata:s:a:0 language=en     -f mp4  "${file%.*}.mp4"; done
 
-#ls -lah dvd/VIDEO_TS/
-#mkdir dvd
-#sudo mount /media/storage/dead_man.iso dvd/
-#ls -lah dvd/VIDEO_TS/
-#sudo cp dvd/VIDEO_TS/VTS_02_0.IFO default.IFO
+if you need filter add before -f mp4
+
+     -filter:v scale=1280:-1
+
+
+dvdrip output.vob
