@@ -112,12 +112,12 @@ ok
 
     nano dvdrip.sh copy this in
 
-    #!/bin/bash
-  for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzeduration 410M -hwaccel drm -hwaccel_output_format drm_prime  \
-  -canvas_size  720x576  -i "$file"  -ss 00:00:02 -metadata title="$file" \
-  -map 0:v -scodec dvdsub   -map 0:s -metadata:s:s:0 language=deu    \
- -c:v h264_v4l2m2m   -b:v 3M  -num_capture_buffers 92   -num_output_buffers 64 -bufsize 5M   -maxrate 5M  -aspect 16:9 \
-  -c:a libfdk_aac     -b:a 128k -map 0:a -metadata:s:a:0 language=en     -f mp4  "${file%.*}.mp4"; done
+      #!/bin/bash
+      for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzeduration 410M -hwaccel drm -hwaccel_output_format drm_prime  \
+     -canvas_size  720x576  -i "$file"  -ss 00:00:02 -metadata title="$file" \
+     -map 0:v -scodec dvdsub   -map 0:s -metadata:s:s:0 language=deu    \
+      -c:v h264_v4l2m2m   -b:v 3M  -num_capture_buffers 92   -num_output_buffers 64 -bufsize 5M   -maxrate 5M  -aspect 16:9 \
+       -c:a libfdk_aac     -b:a 128k -map 0:a -metadata:s:a:0 language=en     -f mp4  "${file%.*}.mp4"; done
 
 -canvas_size is the size of video input if it is not right the subtitles come not on place
 
