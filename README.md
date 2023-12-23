@@ -110,7 +110,9 @@ lokk for GB file the biggest
 
 ok
 
-    nano dvdrip.sh copy this in
+    nano dvdrip.sh 
+    
+copy this in
 
       #!/bin/bash
       for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzeduration 410M -hwaccel drm -hwaccel_output_format drm_prime  \
