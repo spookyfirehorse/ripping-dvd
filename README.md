@@ -14,7 +14,8 @@ set movie by hand
 from iso file 
 
 
-       mplayer dvd://3 -dumpstream -dumpfile output.vob ## now you have the dumpstream for the next step to create a mp4 or inthis case mkv
+       mplayer dvd://3 -dumpstream -dumpfile output.vob ## now you have the dumpstream 
+       
        
 or simply       
        
@@ -91,13 +92,6 @@ play it
 for raspberry
 
 
-
-    mkdir dvd
-    
-than
-
-    sudo mount /dev/sr0 dvd/
-and
 
     mpv dvdnav:// --dvd-device=/dev/sr0 --stream-dump=output.vob
 
