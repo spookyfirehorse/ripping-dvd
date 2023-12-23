@@ -5,15 +5,26 @@ Ripping full dvd with all subtitle and all languages
 
        
        sudo mount /dev/sr0 /dev/dvd
+       
        lsdvd /dev/sr0 ### look for longest track on the end of output
+       
        mplayer dvd://3    ##  only looking if this is correct
+       
+       mplayer dvd://3 /dev/sr0 -dumpstream -dumpfile output.vob
+
+from iso file 
+
+
        mplayer dvd://3 -dumpstream -dumpfile output.vob ## now you have the dumpstream for the next step to create a mp4 or inthis case mkv
-       mpv dvdnav:// --dvd-device=/media/spooky/store/down-by-low.img --stream-dump=/media/spooky/store/output.vob 
+       
+or simply       
+       
+       mpv dvdnav:// --dvd-device=down-by-low.img --stream-dump=output.vob 
 
 
 mpv       copy to .vob without nr = default movie
 
-       mpv dvdnav:// --dvd-device=/media/spooky/store/down-by-low.img --stream-dump=/media/spooky/store/output.vob
+       mpv dvdnav:// --dvd-device=down-by-low.img --stream-dump=output.vob
 
 now you heave the vob file
 
@@ -60,10 +71,11 @@ so now the finsh
 copy and past in     
 
         #!/bin/bash
-       for file in "$1"; do   ffmpeg   -hwaccel cuda -probesize 1200M -analyzeduration 1210M   -hwaccel_output_format nv12 -ifo_palette default.IFO    \
-        -canvas_size 720x576  -i "$file"  -ss 00:00:02     -metadata title="$file"  -map 0:v -scodec dvdsub  \
-         -map 0:s     -c:v hevc_nvenc -profile:v main10  -level 5.2 -preset p5 -tune hq -b:v 3M -maxrate 5M   -qmin 0 -g 250 -rc-lookahead 20 -aspect 16:9   \
-         -c:a libfdk_aac  -b:a 128k  -map 0:a  -f matroska  "${file%.*}.mkv"; done
+        for file in "$1"; do   ffmpeg -fflags +genpts   -ifo_palette default.IFO -y -probesize 2400M -analyzeduration 2410M -hwaccel drm -hwaccel_output_format drm_prime  \
+        -canvas_size  720x576  -i "$file"  -ss 00:00:02 -metadata title="$file" \
+         -map 0:v -scodec dvdsub   -map 0:s -metadata:s:s:0 language=deu    \
+        -c:v h264_v4l2m2m  -b:v 3M  -num_capture_buffers 92   -num_output_buffers 64 -bufsize 5M   -maxrate 5M  -aspect 16:9 \
+        -c:a libopus -movflags +faststart    -b:a 128k -map 0:a -metadata:s:a:0 language=en     -f mp4  "${file%.*}.mp4"; done
 
 maybe you heave to set cnvas size to your movie resolution in the script -canvas_size 720x576 to correct the right place
 
@@ -117,12 +129,10 @@ ok
   for file in "$1"; do   ffmpeg -ifo_palette default.IFO  -probesize 400M -analyzeduration 410M -hwaccel drm -hwaccel_output_format drm_prime  \
   -canvas_size  720x576  -i "$file"  -ss 00:00:02 -metadata title="$file" \
   -map 0:v -scodec dvdsub   -map 0:s:0 -metadata:s:s:0 language=deu    \
- -c:v h264_v4l2m2m  -b:v 3M -bufsize 5M  -maxrate 5M  -aspect 16:9  -r 25 \
+ -c:v h264_v4l2m2m   -b:v 3M  -num_capture_buffers 92   -num_output_buffers 64 -bufsize 5M   -maxrate 5M  -aspect 16:9 \
   -c:a libfdk_aac     -b:a 128k -map 0:a:0 -metadata:s:a:0 language=en     -f mp4  "${file%.*}.mp4"; done
 
-if you need filter add before -f mp4
-
-     -filter:v scale=1280:-1
+-canvas_size is the size of video input if it is not right the subtitles come not on place
 
 
       dvdrip output.vob
