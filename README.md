@@ -6,10 +6,16 @@ Ripping full dvd with all subtitle and all languages
 set movie by hand
 
        lsdvd /dev/sr0 ### look for longest track on the end of output
+
+        first track longest example
+
+       mpv dvd://1 --dvd-device=/dev/sr0  --cache=no  --stream-dump=output.vob
+
+       mplayer first track longest put 0 is the file
        
-       mplayer dvd://3    ##  only looking if this is correct
+       mplayer dvd://0    ##  only looking if this is correct
        
-       mplayer dvd://3 /dev/sr0 -dumpstream -dumpfile output.vob
+       mplayer dvd://0 /dev/sr0 -dumpstream -dumpfile output.vob
 
 from iso file 
 
