@@ -22,6 +22,7 @@ ripping_nvenc.sh
 
 # Nutzung: ./ripping_nvenc.sh output.vob
 
+```bash
 #!/bin/bash
 for file in "$1"; do
   ffmpeg -hwaccel nvdec -hwaccel_output_format nv12 \
