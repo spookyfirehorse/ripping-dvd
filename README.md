@@ -3,6 +3,7 @@ The provided text outlines a process for high-speed DVD ripping using FFmpeg wit
 
 
 # Via mpv (empfohlen)
+
 ```bash
 mpv dvdnav:// --dvd-device=/dev/sr0 --cache=no --stream-dump=output.vob
 ```
@@ -16,19 +17,20 @@ Verwende Code mit Vorsicht.
 Schritt 3: Encoding-Skripte
 Option A: NVIDIA GPU (CUDA/NVENC)
 Ideal für PC-Nutzer mit NVIDIA-Grafikkarte. Nutzt hevc_nvenc für 10-Bit HEVC.
+
 ripping_nvenc.sh
 
-#!/bin/bash
 # Nutzung: ./ripping_nvenc.sh output.vob
-```bash
+
+#!/bin/bash
 for file in "$1"; do
   ffmpeg -hwaccel nvdec -hwaccel_output_format nv12 \
   -probesize 1200M -analyzeduration 1210M \
   -ifo_palette default.IFO -canvas_size 720x576 \
   -i "$file" -ss 00:00:02 \
-  -map 0:v -c:v hevc_nvenc -profile:v main10 -preset p5 -tune hq -b:v 3M -maxrate 5M -aspect 16:9 \
-  -map 0:a -c:a libfdk_aac -b:a 128k \
-  -map 0:s -scodec dvdsub \
+  -map 0:v? -c:v hevc_nvenc -profile:v main10 -preset p5 -tune hq -b:v 3M -maxrate 5M -aspect 16:9 \
+  -map 0:a? -c:a libfdk_aac -b:a 128k \
+  -map 0:s? -scodec dvdsub \
   -metadata title="$file" -f matroska "${file%.*}_main10.mkv"
 done
 ```
@@ -46,9 +48,9 @@ for file in "$1"; do
   -probesize 400M -analyzeduration 410M \
   -ifo_palette default.IFO -canvas_size 720x576 \
   -i "$file" -ss 00:00:02 \
-  -map 0:v -c:v h264_v4l2m2m -b:v 3M -num_capture_buffers 92 -aspect 16:9 \
-  -map 0:a -c:a libfdk_aac -b:a 128k \
-  -map 0:s -scodec dvdsub \
+  -map 0:v? -c:v h264_v4l2m2m -b:v 3M -num_capture_buffers 92 -aspect 16:9 \
+  -map 0:a? -c:a libfdk_aac -b:a 128k \
+  -map 0:s? -scodec dvdsub \
   -f mp4 "${file%.*}.mp4"
 done
 ```
@@ -62,9 +64,9 @@ for file in "$1"; do
     -probesize 1200M -analyzeduration 1210M \
     -ifo_palette default.IFO -canvas_size 720x576 \
     -i "$file" -ss 00:00:02 \
-    -map 0:v -c:v hevc_nvenc -profile:v main10 -preset p5 -b:v 3M -maxrate 5M -aspect 16:9 \
-    -map 0:a -c:a ac3 -b:a 640k \
-    -map 0:s -c:s dvdsub \
+    -map 0:v? -c:v hevc_nvenc -profile:v main10 -preset p5 -b:v 3M -maxrate 5M -aspect 16:9 \
+    -map 0:a? -c:a ac3 -b:a 640k \
+    -map 0:s? -c:s dvdsub \
     -metadata title="$file" \
     -f matroska "${file%.*}_51.mkv"
 done
@@ -83,10 +85,10 @@ for file in "$1"; do
     -probesize 400M -analyzeduration 410M \
     -ifo_palette default.IFO -canvas_size 720x576 \
     -i "$file" -ss 00:00:02 \
-    -map 0:v -c:v h264_v4l2m2m -b:v 3M -num_capture_buffers 92 -num_output_buffers 64 \
+    -map 0:v? -c:v h264_v4l2m2m -b:v 3M -num_capture_buffers 92 -num_output_buffers 64 \
     -bufsize 5M -maxrate 5M -aspect 16:9 \
-    -map 0:a -c:a libfdk_aac -b:a 128k \
-    -map 0:s -c:s dvdsub \
+    -map 0:a? -c:a libfdk_aac -b:a 128k \
+    -map 0:s? -c:s dvdsub \
     -metadata title="$file" \
     -f matroska "${file%.*}.mkv"
 done
@@ -108,4 +110,4 @@ Starten:
 ripping-dvd output.vob
 Wichtige Hinweise:
 Canvas Size: Falls die Untertitel verschoben sind, prüfe die Auflösung deiner Quelle mit ffprobe und passe -canvas_size (z. B. 720x480 für NTSC) an.
-Sprach-Tags: Im Skript sind language=deu und language=en als Metadaten gesetzt. Diese kannst du je nach DVD im FFmpeg Metadata Guide anpassen.
+Sprach-Tags:  Diese kannst du je nach DVD im FFmpeg Metadata Guide anpassen.
